@@ -7,4 +7,5 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../coverage/backend',
+  testMatch: ['<rootDir>/src/tests/**/*.spec.ts'],
 };

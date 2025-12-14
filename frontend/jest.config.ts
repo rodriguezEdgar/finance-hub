@@ -7,4 +7,5 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../coverage/frontend',
+  testMatch: ['<rootDir>/src/tests/**/*.spec.tsx'],
 };
