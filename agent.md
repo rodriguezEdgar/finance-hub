@@ -34,6 +34,12 @@
 - Use `camelCase` for fields and `PascalCase` for models.
 - Enums are preferred for fixed lists (Currency, AssetType).
 
+### Testing
+- **Unit Tests:** Located in `src/tests/` for both backend and frontend.
+- **Backend:** Uses Jest. Run with `npx nx test backend`.
+- **Frontend:** Uses Vitest. Run with `npx nx test frontend`.
+- **File Naming:** `*.spec.ts` for backend, `*.spec.tsx` for frontend.
+
 ## 4. Domain Specific Rules
 - **Currency:** All monetary values must have an associated `Currency` enum (ARS/USD).
 - **Argentine Context:** The app heavily relies on "Exchange Rates" (MEP/CCL). When converting values, always check the Date of the transaction to pick the historic rate.
