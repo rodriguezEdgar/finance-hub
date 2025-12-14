@@ -1,0 +1,138 @@
+@startuml
+
+!theme plain
+hide circle
+skinparam linetype ortho
+
+' --- Enums ---
+enum Currency {
+  ARS
+  USD
+}
+
+enum AssetType {
+  CEDEAR
+  BOND
+  ON
+  FCI
+  CRYPTO
+  STOCK
+  CASH
+}
+
+enum TransactionType {
+  BUY
+  SELL
+  DIVIDEND
+  TRANSFER
+}
+
+' --- Core Entities ---
+
+entity "Account" as account {
+  *id : String <<generated>>
+  --
+  name : String
+  currency : Currency
+  isCrypto : Boolean
+}
+
+entity "ExchangeRate" as exchange_rate {
+  *id : String <<generated>>
+  --
+  date : DateTime
+  type : String
+  rate : Decimal
+}
+
+' --- Expense Domain ---
+
+entity "ExpenseCategory" as expense_category {
+  *id : String <<generated>>
+  --
+  name : String
+}
+
+entity "Expense" as expense {
+  *id : String <<generated>>
+  --
+  date : DateTime
+  amount : Decimal
+  currency : Currency
+  description : String
+  isInstallment : Boolean
+  installmentNumber : Integer
+  totalInstallments : Integer
+  --
+  *accountId : String <<FK>>
+  categoryId : String <<FK>>
+}
+
+entity "Income" as income {
+  *id : String <<generated>>
+  --
+  date : DateTime
+  amount : Decimal
+  currency : Currency
+  source : String
+  --
+  *accountId : String <<FK>>
+}
+
+' --- Investment Domain ---
+
+entity "Asset" as asset {
+  *id : String <<generated>>
+  --
+  *ticker : String <<unique>>
+  name : String
+  type : AssetType
+  conversionRatio : Decimal
+}
+
+entity "PortfolioTransaction" as portfolio_transaction {
+  *id : String <<generated>>
+  --
+  date : DateTime
+  type : TransactionType
+  quantity : Decimal
+  pricePerUnit : Decimal
+  fees : Decimal
+  currency : Currency
+  exchangeRate : Decimal
+  --
+  *assetId : String <<FK>>
+  *accountId : String <<FK>>
+}
+
+entity "AssetPrice" as asset_price {
+  *id : String <<generated>>
+  --
+  date : DateTime
+  price : Decimal
+  --
+  *assetId : String <<FK>>
+}
+
+entity "ScraperConfig" as scraper_config {
+  *id : String <<generated>>
+  --
+  ticker : String
+  url : String
+  selector : String
+  frequency : Integer
+  enabled : Boolean
+}
+
+' --- Relationships ---
+
+account ||..o{ expense : "has"
+account ||..o{ income : "receives"
+account ||..o{ portfolio_transaction : "holds"
+
+expense_category ||..o{ expense : "categorizes"
+
+asset ||..o{ portfolio_transaction : "history"
+asset ||..o{ asset_price : "pricing"
+
+@enduml
